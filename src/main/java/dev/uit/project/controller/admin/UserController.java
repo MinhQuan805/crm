@@ -51,39 +51,39 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.getUserById(id));
         } catch (RuntimeException ex) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body("{\"error\": \"" + ex.getMessage() + "\"}");
         }
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest request) {
         try {
             return ResponseEntity.ok(userService.createUser(request));
         } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("{\"error\": \"" + ex.getMessage() + "\"}");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         try {
             return ResponseEntity.ok(userService.updateUser(id, request));
         } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("{\"error\": \"" + ex.getMessage() + "\"}");
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException ex) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body("{\"error\": \"" + ex.getMessage() + "\"}");
         }
     }
 }

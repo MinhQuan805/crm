@@ -28,18 +28,21 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllUsers(String search, List<User.UserRole> roles, List<User.UserStatus> statuses, Pageable pageable) {
-        Specification<User> specification = Specification.where(null);
+        Specification<User> specification = null;
 
         if (search != null && !search.isBlank()) {
-            specification = specification.and(UserSpecification.searchByKeyword(search));
+            Specification<User> s = UserSpecification.searchByKeyword(search);
+            specification = (specification == null) ? s : specification.and(s);
         }
 
         if (roles != null && !roles.isEmpty()) {
-            specification = specification.and(UserSpecification.hasRoles(roles));
+            Specification<User> s = UserSpecification.hasRoles(roles);
+            specification = (specification == null) ? s : specification.and(s);
         }
 
         if (statuses != null && !statuses.isEmpty()) {
-            specification = specification.and(UserSpecification.hasStatuses(statuses));
+            Specification<User> s = UserSpecification.hasStatuses(statuses);
+            specification = (specification == null) ? s : specification.and(s);
         }
 
         return userRepository.findAll(specification, pageable).map(UserDTO::fromEntity);

@@ -149,16 +149,17 @@ public class User {
 	}
 
 	public enum UserRole {
-		SUPERADMIN,
-		ADMIN,
-		MANAGER,
-		CASHIER
+		superadmin,
+		admin,
+		manager,
+		staff,
+		client
 	}
 
 	public enum UserStatus {
-		ACTIVE,
-		INACTIVE,
-		INVITED,
-		SUSPENDED
+		active,
+		inactive,
+		invited,
+		suspended
 	}
 }

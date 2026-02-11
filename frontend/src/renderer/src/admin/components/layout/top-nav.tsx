@@ -7,13 +7,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { type AdminRoute } from '@/admin/AdminApp'
 import { useAdminRoute } from '@/admin/AdminApp'
 
 // Map URL to route name
-const urlToRoute: Record<string, 'dashboard' | 'users'> = {
+const urlToRoute: Record<string, AdminRoute> = {
   '/': 'dashboard',
   '/dashboard': 'dashboard',
-  '/users': 'users'
+  '/users': 'users',
+  '/rooms': 'rooms',
+  '/room-types': 'room-types',
+  '/bookings': 'bookings',
+  '/pricing-seasonal': 'pricing-seasonal',
+  '/pricing-daily': 'pricing-daily',
+  '/promotions': 'promotions',
+  '/customers': 'customers',
+  '/reports': 'reports',
+  '/content': 'content',
+  '/settings': 'settings',
+  '/settings/account': 'settings-account',
+  '/settings/appearance': 'settings-appearance',
+  '/settings/notifications': 'settings-notifications',
+  '/settings/display': 'settings-display'
 }
 
 type TopNavProps = React.HTMLAttributes<HTMLElement> & {

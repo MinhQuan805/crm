@@ -18,7 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { statusColors, roles } from '../data/data'
+import { statusColors, roles, statuses } from '../data/data'
 import { type User } from '../data/schema'
 import { useUsers } from './users-provider'
 
@@ -64,6 +64,16 @@ export function UsersTable() {
     return null
   }
 
+  const getRoleLabel = (role: string) => {
+    const roleData = roles.find((r) => r.value === role)
+    return roleData?.label || role
+  }
+
+  const getStatusLabel = (status: string) => {
+    const statusData = statuses.find((s) => s.value === status)
+    return statusData?.label || status
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-4">
       {/* Search/Filter Toolbar */}
@@ -71,7 +81,7 @@ export function UsersTable() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Filter users..."
+            placeholder="Tìm kiếm người dùng..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value)
@@ -88,12 +98,12 @@ export function UsersTable() {
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>Username</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Tên</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Phone Number</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead className="w-17">Actions</TableHead>
+              <TableHead>Số điện thoại</TableHead>
+              <TableHead>Trạng thái</TableHead>
+              <TableHead>Vai trò</TableHead>
+              <TableHead className="w-17">Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -111,17 +121,14 @@ export function UsersTable() {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.phoneNumber}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={cn('capitalize', statusColors.get(user.status))}
-                    >
-                      {user.status}
+                    <Badge variant="outline" className={cn(statusColors.get(user.status))}>
+                      {getStatusLabel(user.status)}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-x-2">
                       {getRoleIcon(user.role)}
-                      <span className="text-sm capitalize">{user.role}</span>
+                      <span className="text-sm">{getRoleLabel(user.role)}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -135,14 +142,14 @@ export function UsersTable() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleEdit(user)}>
                           <Pencil className="mr-2 h-4 w-4" />
-                          Edit
+                          Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => handleDelete(user)}
                           className="text-destructive focus:text-destructive"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
+                          Xóa
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,11 +20,20 @@ type UsersDeleteDialogProps = {
 
 export function UsersDeleteDialog({ currentRow, open, onOpenChange }: UsersDeleteDialogProps) {
   const { deleteUser } = useUsers()
+  const [deleting, setDeleting] = useState(false)
 
-  const handleDelete = () => {
-    deleteUser(currentRow.id)
-    toast.success(`User "${currentRow.username}" has been deleted.`)
-    onOpenChange(false)
+  const handleDelete = async () => {
+    try {
+      setDeleting(true)
+      await deleteUser(currentRow.id)
+      toast.success(`User "${currentRow.username}" has been deleted.`)
+      onOpenChange(false)
+    } catch (error) {
+      toast.error('Failed to delete user.')
+      console.error('Delete user error:', error)
+    } finally {
+      setDeleting(false)
+    }
   }
 
   return (
@@ -42,8 +52,8 @@ export function UsersDeleteDialog({ currentRow, open, onOpenChange }: UsersDelet
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button variant="destructive" onClick={handleDelete}>
-            Delete
+          <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
+            {deleting ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -27,13 +27,28 @@ import {
   type NavLink,
   type NavGroup as NavGroupProps
 } from './types'
+import { type AdminRoute } from '@/admin/AdminApp'
 import { useAdminRoute } from '@/admin/AdminApp'
 
 // Map URL to route name
-const urlToRoute: Record<string, 'dashboard' | 'users'> = {
+const urlToRoute: Record<string, AdminRoute> = {
   '/': 'dashboard',
   '/dashboard': 'dashboard',
-  '/users': 'users'
+  '/users': 'users',
+  '/rooms': 'rooms',
+  '/room-types': 'room-types',
+  '/bookings': 'bookings',
+  '/pricing-seasonal': 'pricing-seasonal',
+  '/pricing-daily': 'pricing-daily',
+  '/promotions': 'promotions',
+  '/customers': 'customers',
+  '/reports': 'reports',
+  '/content': 'content',
+  '/settings': 'settings',
+  '/settings/account': 'settings-account',
+  '/settings/appearance': 'settings-appearance',
+  '/settings/notifications': 'settings-notifications',
+  '/settings/display': 'settings-display'
 }
 
 interface NavGroupComponentProps extends NavGroupProps {
@@ -101,6 +116,17 @@ function SidebarMenuCollapsible({
   currentPath: string
 }) {
   const { setOpenMobile } = useSidebar()
+  const { setCurrentRoute } = useAdminRoute()
+
+  const handleSubClick = (e: React.MouseEvent, url: string) => {
+    e.preventDefault()
+    setOpenMobile(false)
+    const route = urlToRoute[url]
+    if (route) {
+      setCurrentRoute(route)
+    }
+  }
+
   return (
     <Collapsible
       asChild
@@ -121,7 +147,7 @@ function SidebarMenuCollapsible({
             {item.items.map((subItem) => (
               <SidebarMenuSubItem key={subItem.title}>
                 <SidebarMenuSubButton asChild isActive={checkIsActive(currentPath, subItem)}>
-                  <a href={subItem.url} onClick={() => setOpenMobile(false)}>
+                  <a href={subItem.url} onClick={(e) => handleSubClick(e, subItem.url)}>
                     {subItem.icon && <subItem.icon />}
                     <span>{subItem.title}</span>
                     {subItem.badge && <NavBadge>{subItem.badge}</NavBadge>}

@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import useDialogState from '@/hooks/use-dialog-state'
-import { type User } from '../data/schema'
+import { type User, type CreateUserRequest, type UpdateUserRequest } from '../data/schema'
+import { toast } from 'sonner'
+import { usersApi } from '../data/api'
 
 type UsersDialogType = 'add' | 'edit' | 'delete'
 
@@ -11,41 +13,55 @@ type UsersContextType = {
   setCurrentRow: React.Dispatch<React.SetStateAction<User | null>>
   users: User[]
   setUsers: React.Dispatch<React.SetStateAction<User[]>>
-  addUser: (user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => void
-  updateUser: (id: string, user: Partial<User>) => void
-  deleteUser: (id: string) => void
+  loading: boolean
+  addUser: (data: CreateUserRequest) => Promise<void>
+  updateUser: (id: number, data: UpdateUserRequest) => Promise<void>
+  deleteUser: (id: number) => Promise<void>
+  refreshUsers: () => Promise<void>
 }
 
 const UsersContext = React.createContext<UsersContextType | null>(null)
 
 type UsersProviderProps = {
   children: React.ReactNode
-  initialUsers: User[]
 }
 
-export function UsersProvider({ children, initialUsers }: UsersProviderProps) {
+export function UsersProvider({ children }: UsersProviderProps) {
   const [open, setOpen] = useDialogState<UsersDialogType>(null)
   const [currentRow, setCurrentRow] = useState<User | null>(null)
-  const [users, setUsers] = useState<User[]>(initialUsers)
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const addUser = (userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const newUser: User = {
-      ...userData,
-      id: Math.random().toString(36).substring(2) + Date.now().toString(36),
-      createdAt: new Date(),
-      updatedAt: new Date()
+  const fetchUsers = useCallback(async () => {
+    try {
+      setLoading(true)
+      const data = await usersApi.list()
+      setUsers(data.content || [])
+    } catch (error) {
+      toast.error('Không thể tải danh sách người dùng.')
+      console.error('Failed to fetch users:', error)
+    } finally {
+      setLoading(false)
     }
+  }, [])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
+
+  const addUser = async (data: CreateUserRequest) => {
+    const newUser = await usersApi.create(data)
     setUsers((prev) => [newUser, ...prev])
   }
 
-  const updateUser = (id: string, userData: Partial<User>) => {
-    setUsers((prev) =>
-      prev.map((user) => (user.id === id ? { ...user, ...userData, updatedAt: new Date() } : user))
-    )
+  const updateUser = async (id: number, data: UpdateUserRequest) => {
+    const updated = await usersApi.update(id, data)
+    setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)))
   }
 
-  const deleteUser = (id: string) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id))
+  const deleteUser = async (id: number) => {
+    await usersApi.delete(id)
+    setUsers((prev) => prev.filter((u) => u.id !== id))
   }
 
   return (
@@ -57,9 +73,11 @@ export function UsersProvider({ children, initialUsers }: UsersProviderProps) {
         setCurrentRow,
         users,
         setUsers,
+        loading,
         addUser,
         updateUser,
-        deleteUser
+        deleteUser,
+        refreshUsers: fetchUsers
       }}
     >
       {children}

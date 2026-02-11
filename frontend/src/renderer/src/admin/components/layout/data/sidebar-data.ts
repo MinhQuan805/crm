@@ -1,23 +1,20 @@
 import {
   LayoutDashboard,
-  ListTodo,
-  Package,
-  MessagesSquare,
+  Bed,
+  BedDouble,
+  Calendar,
   Users,
+  BarChart3,
+  FileText,
   Settings,
-  HelpCircle,
   UserCog,
   Wrench,
   Palette,
   Bell,
   Monitor,
-  ShieldCheck,
-  Bug,
-  Lock,
-  UserX,
-  FileX,
-  ServerOff,
-  Construction,
+  CalendarDays,
+  CalendarClock,
+  Percent,
   AudioWaveform,
   Command,
   GalleryVerticalEnd
@@ -34,7 +31,7 @@ export const sidebarData: SidebarData = {
     {
       name: 'Hotel Admin',
       logo: Command,
-      plan: 'Electron + React'
+      plan: 'Quản Lý Khách Sạn'
     },
     {
       name: 'Acme Inc',
@@ -49,128 +46,128 @@ export const sidebarData: SidebarData = {
   ],
   navGroups: [
     {
-      title: 'General',
+      title: 'Tổng Quan',
       items: [
         {
-          title: 'Dashboard',
+          title: 'Bảng điều khiển',
           url: '/',
           icon: LayoutDashboard
+        }
+      ]
+    },
+    {
+      title: 'Phòng',
+      items: [
+        {
+          title: 'Loại Phòng',
+          url: '/room-types',
+          icon: BedDouble
         },
         {
-          title: 'Tasks',
-          url: '/tasks',
-          icon: ListTodo
+          title: 'Danh Sách Phòng',
+          url: '/rooms',
+          icon: Bed
+        }
+      ]
+    },
+    {
+      title: 'Đặt Phòng',
+      items: [
+        {
+          title: 'Quản Lý Đặt Phòng',
+          url: '/bookings',
+          icon: Calendar
+        }
+      ]
+    },
+    {
+      title: 'Giá và Khuyến Mãi',
+      items: [
+        {
+          title: 'Giá Theo Mùa',
+          url: '/pricing-seasonal',
+          icon: CalendarDays
         },
         {
-          title: 'Apps',
-          url: '/apps',
-          icon: Package
+          title: 'Giá Theo Ngày',
+          url: '/pricing-daily',
+          icon: CalendarClock
         },
         {
-          title: 'Chats',
-          url: '/chats',
-          badge: '3',
-          icon: MessagesSquare
-        },
+          title: 'Khuyến Mãi',
+          url: '/promotions',
+          icon: Percent
+        }
+      ]
+    },
+    {
+      title: 'Khách Hàng',
+      items: [
         {
-          title: 'Users',
-          url: '/users',
+          title: 'Khách hàng',
+          url: '/customers',
           icon: Users
         }
       ]
     },
     {
-      title: 'Pages',
+      title: 'Báo Cáo',
       items: [
         {
-          title: 'Auth',
-          icon: ShieldCheck,
-          items: [
-            {
-              title: 'Sign In',
-              url: '/sign-in'
-            },
-            {
-              title: 'Sign Up',
-              url: '/sign-up'
-            },
-            {
-              title: 'Forgot Password',
-              url: '/forgot-password'
-            }
-          ]
-        },
-        {
-          title: 'Errors',
-          icon: Bug,
-          items: [
-            {
-              title: 'Unauthorized',
-              url: '/errors/unauthorized',
-              icon: Lock
-            },
-            {
-              title: 'Forbidden',
-              url: '/errors/forbidden',
-              icon: UserX
-            },
-            {
-              title: 'Not Found',
-              url: '/errors/not-found',
-              icon: FileX
-            },
-            {
-              title: 'Internal Server Error',
-              url: '/errors/internal-server-error',
-              icon: ServerOff
-            },
-            {
-              title: 'Maintenance Error',
-              url: '/errors/maintenance-error',
-              icon: Construction
-            }
-          ]
+          title: 'Báo Cáo và Thống Kê',
+          url: '/reports',
+          icon: BarChart3
         }
       ]
     },
     {
-      title: 'Other',
+      title: 'Quản Lý',
       items: [
         {
-          title: 'Settings',
+          title: 'Nội Dung và Chính Sách',
+          url: '/content',
+          icon: FileText
+        },
+        {
+          title: 'Người Dùng',
+          url: '/users',
+          icon: UserCog
+        }
+      ]
+    },
+    {
+      title: 'Cài Đặt',
+      items: [
+        {
+          title: 'Cài đặt',
           icon: Settings,
           items: [
             {
-              title: 'Profile',
+              title: 'Hồ sơ',
               url: '/settings',
               icon: UserCog
             },
             {
-              title: 'Account',
+              title: 'Tài khoản',
               url: '/settings/account',
               icon: Wrench
             },
             {
-              title: 'Appearance',
+              title: 'Giao diện',
               url: '/settings/appearance',
               icon: Palette
             },
             {
-              title: 'Notifications',
+              title: 'Thông báo',
               url: '/settings/notifications',
               icon: Bell
             },
             {
-              title: 'Display',
+              title: 'Hiển thị',
               url: '/settings/display',
               icon: Monitor
             }
           ]
-        },
-        {
-          title: 'Help Center',
-          url: '/help-center',
-          icon: HelpCircle
         }
       ]
     }

@@ -32,6 +32,18 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  mainWindow.webContents.on('context-menu', (_, props) => {
+    const { Menu } = require('electron')
+    Menu.buildFromTemplate([
+      {
+        label: 'Inspect',
+        click: () => {
+          mainWindow.webContents.openDevTools({ mode: 'right' })
+        }
+      }
+    ]).popup()
+  })
 }
 
 // This method will be called when Electron has finished

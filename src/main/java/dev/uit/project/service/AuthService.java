@@ -35,15 +35,14 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        if (user.getStatus() != User.UserStatus.ACTIVE) {
+        if (user.getStatus() != User.UserStatus.active) {
             throw new RuntimeException("Account is not active. Status: " + user.getStatus());
         }
 
-        if (user.getRole() != User.UserRole.ADMIN && user.getRole() != User.UserRole.SUPERADMIN) {
-            throw new RuntimeException("Access denied. Only administrators can log in.");
-        }
+        // Allow all roles: superadmin, admin, manager, staff, client
+        // Role-based access control will be handled by the frontend routing
 
-        String accessToken = "mock-access-token-" + UUID.randomUUID();
+        String accessToken = "access-token-" + UUID.randomUUID();
 
         return new LoginResponse(accessToken, UserDTO.fromEntity(user));
     }
@@ -75,8 +74,8 @@ public class AuthService {
         user.setUsername(username);
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(User.UserRole.ADMIN);
-        user.setStatus(User.UserStatus.ACTIVE);
+        user.setRole(User.UserRole.admin);
+        user.setStatus(User.UserStatus.active);
         user.setPhoneNumber("");
 
         User savedUser = userRepository.save(user);

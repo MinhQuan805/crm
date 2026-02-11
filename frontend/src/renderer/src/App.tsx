@@ -32,7 +32,7 @@ function AppRouter(): React.JSX.Element {
         <Route
           path="/admin/*"
           element={
-            <ProtectedRoute allowedRoles={['admin']}>
+            <ProtectedRoute allowedRoles={['superadmin', 'admin', 'manager', 'staff']}>
               <AdminApp />
             </ProtectedRoute>
           }

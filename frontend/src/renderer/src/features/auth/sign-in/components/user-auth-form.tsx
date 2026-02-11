@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Loader2, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuthStore, type AuthUser } from '@/stores/auth-store'
+import { authApi } from '@/lib/api-auth'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,30 +22,8 @@ import { PasswordInput } from '@/components/password-input'
 
 const formSchema = z.object({
   email: z.string().min(1, 'Vui lòng nhập email').email('Email không hợp lệ'),
-  password: z.string().min(1, 'Vui lòng nhập mật khẩu').min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+  password: z.string().min(1, 'Vui lòng nhập mật khẩu').min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
 })
-
-// Mock users for testing
-const MOCK_USERS: Record<string, { password: string; user: Omit<AuthUser, 'exp'> }> = {
-  'admin@gmail.com': {
-    password: '123456',
-    user: {
-      id: '1',
-      email: 'admin@gmail.com',
-      name: 'Admin',
-      role: 'admin'
-    }
-  },
-  'client@gmail.com': {
-    password: '123456',
-    user: {
-      id: '2',
-      email: 'client@gmail.com',
-      name: 'Client User',
-      role: 'client'
-    }
-  }
-}
 
 export function UserAuthForm({
   className,
@@ -53,7 +32,6 @@ export function UserAuthForm({
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { login } = useAuthStore()
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,45 +43,39 @@ export function UserAuthForm({
   async function onSubmit(data: z.infer<typeof formSchema>): Promise<void> {
     setIsLoading(true)
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      // Call real API
+      const response = await authApi.login({
+        email: data.email,
+        password: data.password
+      })
 
-    const mockUser = MOCK_USERS[data.email]
+      // Map backend UserDTO to frontend AuthUser
+      const authenticatedUser: AuthUser = {
+        id: response.user.id.toString(),
+        email: response.user.email,
+        name: `${response.user.firstName} ${response.user.lastName}`.trim(),
+        role: response.user.role,
+        exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours from now
+      }
 
-    if (!mockUser || mockUser.password !== data.password) {
-      setIsLoading(false)
+      // Login and store token
+      login(authenticatedUser, response.accessToken)
+
+      toast.success(`Chào mừng, ${authenticatedUser.name}!`)
+
+      // Redirect based on role
+      if (['superadmin', 'admin', 'manager', 'staff'].includes(authenticatedUser.role)) {
+        navigate('/admin', { replace: true })
+      } else {
+        navigate('/client', { replace: true })
+      }
+    } catch (error) {
       toast.error('Đăng nhập thất bại', {
-        description: 'Email hoặc mật khẩu không đúng'
+        description: error instanceof Error ? error.message : 'Email hoặc mật khẩu không đúng'
       })
-      return
-    }
-
-    // Check if user is admin - only admin can login
-    if (mockUser.user.role !== 'admin') {
+    } finally {
       setIsLoading(false)
-      toast.error('Không có quyền truy cập', {
-        description: 'Chỉ admin mới được đăng nhập vào hệ thống'
-      })
-      return
-    }
-
-    // Create authenticated user with expiration
-    const authenticatedUser: AuthUser = {
-      ...mockUser.user,
-      exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours from now
-    }
-
-    // Login and store token
-    login(authenticatedUser, 'mock-access-token-' + Date.now())
-
-    setIsLoading(false)
-    toast.success(`Chào mừng, ${authenticatedUser.name}!`)
-
-    // Redirect based on role
-    if (authenticatedUser.role === 'admin') {
-      navigate('/admin', { replace: true })
-    } else {
-      navigate('/client', { replace: true })
     }
   }
 

@@ -1,13 +1,31 @@
+import { useEffect, useState } from 'react'
+import { Bed, Calendar, DollarSign, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AnalyticsChart } from './analytics-chart'
+import { dashboardApi, type DashboardOverview } from '../data/api'
+
+const formatVND = (val: number) =>
+  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val)
 
 export function Analytics() {
+  const [overview, setOverview] = useState<DashboardOverview | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    dashboardApi
+      .getOverview()
+      .then(setOverview)
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>Traffic Overview</CardTitle>
-          <CardDescription>Weekly clicks and unique visitors</CardDescription>
+          <CardTitle>Xu Hướng 7 Ngày Qua</CardTitle>
+          <CardDescription>Đặt phòng và doanh thu hàng ngày</CardDescription>
         </CardHeader>
         <CardContent className="px-6">
           <AnalyticsChart />
@@ -16,89 +34,75 @@ export function Analytics() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Clicks</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M3 3v18h18" />
-              <path d="M7 15l4-4 4 4 4-6" />
-            </svg>
+            <CardTitle className="text-sm font-medium">Đặt Phòng Hôm Nay</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,248</div>
-            <p className="text-xs text-muted-foreground">+12.4% vs last week</p>
+            {loading ? (
+              <div className="h-8 w-16 animate-pulse rounded bg-muted" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">{overview?.todayBookings ?? 0}</div>
+                <p className="text-xs text-muted-foreground">Đặt phòng mới</p>
+              </>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Unique Visitors</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <circle cx="12" cy="7" r="4" />
-              <path d="M6 21v-2a6 6 0 0 1 12 0v2" />
-            </svg>
+            <CardTitle className="text-sm font-medium">Phòng Trống</CardTitle>
+            <Bed className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">832</div>
-            <p className="text-xs text-muted-foreground">+5.8% vs last week</p>
+            {loading ? (
+              <div className="h-8 w-16 animate-pulse rounded bg-muted" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">{overview?.availableRooms ?? 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  /{overview?.totalRooms ?? 0} tổng phòng
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Bounce Rate</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M3 12h6l3 6 3-6h6" />
-            </svg>
+            <CardTitle className="text-sm font-medium">Tỷ Lệ Lấp Đầy</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">42%</div>
-            <p className="text-xs text-muted-foreground">-3.2% vs last week</p>
+            {loading ? (
+              <div className="h-8 w-16 animate-pulse rounded bg-muted" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">
+                  {overview?.occupancyRate?.toFixed(1) ?? 0}%
+                </div>
+                <p className="text-xs text-muted-foreground">Công suất hiện tại</p>
+              </>
+            )}
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Session</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-            </svg>
+            <CardTitle className="text-sm font-medium">Doanh Thu Tháng</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3m 24s</div>
-            <p className="text-xs text-muted-foreground">+8.1% vs last week</p>
+            {loading ? (
+              <div className="h-8 w-24 animate-pulse rounded bg-muted" />
+            ) : (
+              <>
+                <div className="text-2xl font-bold">
+                  {overview ? formatVND(overview.monthlyRevenue) : '—'}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {overview && overview.revenueGrowth >= 0 ? '+' : ''}
+                  {overview?.revenueGrowth?.toFixed(1) ?? 0}% so với tháng trước
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

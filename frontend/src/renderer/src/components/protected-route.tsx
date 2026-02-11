@@ -1,9 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAuthStore } from '@/stores/auth-store'
+import { useAuthStore, type UserRole } from '@/stores/auth-store'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
-  allowedRoles?: ('admin' | 'client')[]
+  allowedRoles?: UserRole[]
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps): React.JSX.Element {
@@ -18,7 +18,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps):
   // Check role-based access if allowedRoles is specified
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     // Redirect to the appropriate page based on user's actual role
-    if (user.role === 'admin') {
+    if (['superadmin', 'admin', 'manager', 'staff'].includes(user.role)) {
       return <Navigate to="/admin" replace />
     } else if (user.role === 'client') {
       return <Navigate to="/client" replace />
@@ -35,7 +35,7 @@ export function PublicRoute({ children }: { children: React.ReactNode }): React.
 
   if (isAuthenticated && user) {
     // Redirect authenticated users to their appropriate dashboard
-    if (user.role === 'admin') {
+    if (['superadmin', 'admin', 'manager', 'staff'].includes(user.role)) {
       return <Navigate to="/admin" replace />
     } else if (user.role === 'client') {
       return <Navigate to="/client" replace />

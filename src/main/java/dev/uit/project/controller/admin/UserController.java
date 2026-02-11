@@ -41,12 +41,17 @@ public class UserController {
             @RequestParam(required = false) List<User.UserRole> roles,
             @RequestParam(required = false) List<User.UserStatus> statuses,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Integer size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         Sort.Direction direction = sortDirection.equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Pageable pageable;
+        if (size == null || size <= 0) {
+            pageable = Pageable.unpaged();
+        } else {
+            pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        }
         return ResponseEntity.ok(userService.getAllUsers(search, roles, statuses, pageable));
     }
 

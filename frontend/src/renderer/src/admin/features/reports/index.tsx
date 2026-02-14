@@ -16,8 +16,7 @@ import {
   Cell
 } from 'recharts'
 import { cn } from '@/lib/utils'
-import { Header, Main, TopNav } from '@/admin/components/layout'
-import { ThemeSwitch } from '@/components/theme-switch'
+import { Main} from '@/admin/components/layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
@@ -179,13 +178,6 @@ export function Reports() {
 
   return (
     <>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
-
       <Main>
         <div className="mb-2 flex items-center justify-between space-y-2">
           <h1 className="text-2xl font-bold tracking-tight">Báo Cáo và Thống Kê</h1>
@@ -670,20 +662,3 @@ function DateRangeSelector({
     </div>
   )
 }
-
-/* ---- TopNav config ---- */
-
-const topNav = [
-  {
-    title: 'Overview',
-    href: '/',
-    isActive: false,
-    disabled: false
-  },
-  {
-    title: 'Báo Cáo',
-    href: '/reports',
-    isActive: true,
-    disabled: false
-  }
-]

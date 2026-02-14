@@ -40,11 +40,6 @@ type SettingsShellProps = {
 export function SettingsShell({ children }: SettingsShellProps) {
   return (
     <>
-      <Header>
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
 
       <Main fixed>
         <div className="space-y-0.5">

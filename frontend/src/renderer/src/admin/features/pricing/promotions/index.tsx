@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Header, Main, TopNav } from '@/admin/components/layout'
+import { Main } from '@/admin/components/layout'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -677,13 +677,6 @@ function PromotionsTable() {
   )
 }
 
-// --- Top Nav ---
-const topNav = [
-  { title: 'Overview', href: '/', isActive: false },
-  { title: 'Khuyến Mãi', href: '/pricing/promotions', isActive: true }
-]
-
-// --- Primary Button ---
 function PrimaryButton() {
   const { setOpen } = usePromotions()
   return (
@@ -699,12 +692,6 @@ function PrimaryButton() {
 export function Promotions() {
   return (
     <PromotionsProvider>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
 
       <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">

@@ -3,7 +3,7 @@ import { Bed, Calendar, DollarSign, TrendingUp, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Header, Main, TopNav } from '@/admin/components/layout'
+import { Main } from '@/admin/components/layout'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { Analytics } from './components/analytics'
 import { Overview } from './components/overview'
@@ -28,12 +28,6 @@ export function Dashboard() {
 
   return (
     <>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
 
       <Main>
         <div className="mb-2 flex items-center justify-between space-y-2">
@@ -157,24 +151,3 @@ export function Dashboard() {
     </>
   )
 }
-
-const topNav = [
-  {
-    title: 'Tổng quan',
-    href: '/',
-    isActive: true,
-    disabled: false
-  },
-  {
-    title: 'Người dùng',
-    href: '/users',
-    isActive: false,
-    disabled: false
-  },
-  {
-    title: 'Báo cáo',
-    href: '/reports',
-    isActive: false,
-    disabled: false
-  }
-]

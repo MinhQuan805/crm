@@ -4,12 +4,16 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail
+  SidebarRail,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarTrigger
 } from '@/components/ui/sidebar'
+import { Command } from 'lucide-react'
 import { sidebarData } from './data/sidebar-data'
 import { NavGroup } from './nav-group'
 import { NavUser } from './nav-user'
-import { TeamSwitcher } from './team-switcher'
 import { useAdminRoute, type AdminRoute } from '@/admin/AdminApp'
 
 // Map route to URL path
@@ -46,7 +50,25 @@ export function AppSidebar({ currentPath }: AppSidebarProps) {
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
       <SidebarHeader>
-        <TeamSwitcher teams={sidebarData.teams} />
+        <div className="flex items-center gap-2 group-data-[state=collapsed]:flex-col">
+          <SidebarMenu className="flex-1 group-data-[state=collapsed]:flex-none">
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg" className="cursor-default">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <Command className="size-4" />
+                </div>
+                <div className="grid flex-1 text-start text-sm leading-tight">
+                  <span className="truncate font-semibold">Hotel Admin</span>
+                  <span className="truncate text-xs">Quản Lý Khách Sạn</span>
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+          <SidebarTrigger
+            variant="outline"
+            className="shrink-0 group-data-[state=collapsed]:mt-2"
+          />
+        </div>
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (

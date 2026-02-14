@@ -21,8 +21,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 
 const formSchema = z.object({
-  email: z.string().min(1, 'Vui lòng nhập email').email('Email không hợp lệ'),
-  password: z.string().min(1, 'Vui lòng nhập mật khẩu').min(8, 'Mật khẩu phải có ít nhất 8 ký tự')
+  email: z.string().min(1, 'Vui lòng nhập email').email('Email không hợp lệ')
 })
 
 export function UserAuthForm({
@@ -56,7 +55,7 @@ export function UserAuthForm({
         email: response.user.email,
         name: `${response.user.firstName} ${response.user.lastName}`.trim(),
         role: response.user.role,
-        exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours from now
+        exp: Date.now() + 24 * 60 * 60 * 1000
       }
 
       // Login and store token
@@ -72,7 +71,7 @@ export function UserAuthForm({
       }
     } catch (error) {
       toast.error('Đăng nhập thất bại', {
-        description: error instanceof Error ? error.message : 'Email hoặc mật khẩu không đúng'
+        description: error instanceof Error && 'Email hoặc mật khẩu không đúng'
       })
     } finally {
       setIsLoading(false)

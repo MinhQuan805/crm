@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { MoreHorizontal } from 'lucide-react'
-import { Header, Main, TopNav } from '@/admin/components/layout'
-import { ThemeSwitch } from '@/components/theme-switch'
+import { Main } from '@/admin/components/layout'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -51,13 +50,6 @@ import type { Policy, PolicyType, CreatePolicyRequest } from './data/schema'
 import { createPolicySchema } from './data/schema'
 import { policiesApi } from './data/api'
 
-// ─── Constants ───────────────────────────────────────────────
-
-const topNav = [
-  { title: 'Overview', href: '/', isActive: false },
-  { title: 'Nội Dung', href: '/content', isActive: true }
-]
-
 const POLICY_TYPE_LABELS: Record<PolicyType, string> = {
   CANCELLATION: 'Hủy Phòng',
   TERMS: 'Điều Khoản',
@@ -71,8 +63,6 @@ const POLICY_TYPE_COLORS: Record<PolicyType, string> = {
   PRIVACY: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
   CHECKIN_CHECKOUT: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
 }
-
-// ─── Context ─────────────────────────────────────────────────
 
 type ContentContextValue = {
   policies: Policy[]
@@ -522,13 +512,6 @@ function ContentPage() {
 
   return (
     <>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
-
       <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>

@@ -20,19 +20,6 @@ export function SignUp(): React.JSX.Element {
         <CardContent>
           <SignUpForm />
         </CardContent>
-        <CardFooter>
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            Bằng việc đăng ký, bạn đồng ý với{' '}
-            <a href="/terms" className="underline underline-offset-4 hover:text-primary">
-              Điều khoản dịch vụ
-            </a>{' '}
-            và{' '}
-            <a href="/privacy" className="underline underline-offset-4 hover:text-primary">
-              Chính sách bảo mật
-            </a>
-            .
-          </p>
-        </CardFooter>
       </Card>
     </AuthLayout>
   )

@@ -27,23 +27,6 @@ export const sidebarData: SidebarData = {
     email: 'admin@hotel.com',
     avatar: '/avatars/shadcn.jpg'
   },
-  teams: [
-    {
-      name: 'Hotel Admin',
-      logo: Command,
-      plan: 'Quản Lý Khách Sạn'
-    },
-    {
-      name: 'Acme Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise'
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup'
-    }
-  ],
   navGroups: [
     {
       title: 'Tổng Quan',

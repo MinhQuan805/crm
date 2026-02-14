@@ -34,8 +34,8 @@ export interface RegisterRequest {
 
 export const authApi = {
   login: (data: LoginRequest) => api.post<LoginResponse>('/auth/login', data),
-  
+
   register: (data: RegisterRequest) => api.post<UserDTO>('/auth/register', data),
-  
+
   getCurrentUser: (email: string) => api.get<UserDTO>(`/auth/me?email=${encodeURIComponent(email)}`)
 }

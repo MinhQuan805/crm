@@ -1,26 +1,12 @@
-import { Header, Main, TopNav } from '@/admin/components/layout'
-import { ThemeSwitch } from '@/components/theme-switch'
+import { Main } from '@/admin/components/layout'
 import { RoomsDialogs } from './components/rooms-dialogs'
 import { RoomsPrimaryButtons } from './components/rooms-primary-buttons'
 import { RoomsProvider } from './components/rooms-provider'
 import { RoomsTable } from './components/rooms-table'
 
-const topNav = [
-  { title: 'Overview', href: '/', isActive: false },
-  { title: 'Phòng', href: '/rooms', isActive: true },
-  { title: 'Loại Phòng', href: '/room-types', isActive: false }
-]
-
 export function Rooms() {
   return (
     <RoomsProvider>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
-
       <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>

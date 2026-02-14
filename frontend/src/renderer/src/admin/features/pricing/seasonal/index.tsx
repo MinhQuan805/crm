@@ -2,8 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Header, Main, TopNav } from '@/admin/components/layout'
-import { ThemeSwitch } from '@/components/theme-switch'
+import { Main } from '@/admin/components/layout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -577,11 +576,6 @@ function SeasonalTable() {
   )
 }
 
-// --- Top Nav ---
-const topNav = [
-  { title: 'Overview', href: '/', isActive: false },
-  { title: 'Giá Theo Mùa', href: '/pricing/seasonal', isActive: true }
-]
 
 // --- Primary Button ---
 function PrimaryButton() {
@@ -599,12 +593,6 @@ function PrimaryButton() {
 export function SeasonalPricing() {
   return (
     <SeasonalPricingProvider>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
 
       <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">

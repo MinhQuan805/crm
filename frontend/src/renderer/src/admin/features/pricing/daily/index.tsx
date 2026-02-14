@@ -2,8 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Header, Main, TopNav } from '@/admin/components/layout'
-import { ThemeSwitch } from '@/components/theme-switch'
+import { Main } from '@/admin/components/layout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -577,10 +576,6 @@ function DailyTable() {
   )
 }
 
-const topNav = [
-  { title: 'Overview', href: '/', isActive: false },
-  { title: 'Giá Theo Ngày', href: '/pricing/daily', isActive: true }
-]
 
 function PrimaryButton() {
   const { setOpen } = useDailyPricing()
@@ -596,12 +591,6 @@ function PrimaryButton() {
 export function DailyPricing() {
   return (
     <DailyPricingProvider>
-      <Header>
-        <TopNav links={topNav} />
-        <div className="ms-auto flex items-center space-x-4">
-          <ThemeSwitch />
-        </div>
-      </Header>
 
       <Main className="flex flex-1 flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">

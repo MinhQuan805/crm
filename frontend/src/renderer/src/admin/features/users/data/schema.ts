@@ -45,7 +45,7 @@ export const createUserSchema = z.object({
   phoneNumber: z.string().optional().default(''),
   status: userStatusSchema.default('active'),
   role: userRoleSchema.default('client'),
-  password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự.')
+  password: z.string().min(8, 'Mật khẩu phải có ít nhất 8 ký tự.')
 })
 export type CreateUserRequest = z.infer<typeof createUserSchema>
 
@@ -58,6 +58,6 @@ export const updateUserSchema = z.object({
   phoneNumber: z.string().optional().default(''),
   status: userStatusSchema,
   role: userRoleSchema,
-  password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự.').optional()
+  password: z.string().min(8, 'Mật khẩu phải có ít nhất 8 ký tự.').optional()
 })
 export type UpdateUserRequest = z.infer<typeof updateUserSchema>
